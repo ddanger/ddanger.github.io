@@ -1,0 +1,19 @@
+{
+  "outputPath": "about/index.html",
+  "meta": {
+    "title": "About | St. Paul Web Development Partner | David Dangerfield",
+    "description": "About David Dangerfield, a St. Paul software engineer with 20+ years of frontend and web systems delivery experience.",
+    "canonical": "https://daviddangerfield.com/about/",
+    "og": {
+      "title": "About David Dangerfield | St. Paul Web Development Partner",
+      "description": "Engineering-first website delivery from West St. Paul, with 20+ years of production software experience.",
+      "type": "profile",
+      "url": "https://daviddangerfield.com/about/"
+    }
+  },
+  "footer": {
+    "scheduleHref": "/contact/",
+    "scheduleTarget": null,
+    "scheduleRel": null
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "ddanger-github-io",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "prepare": "git config core.hooksPath .githooks && chmod +x .githooks/pre-commit",
+    "build:html": "node scripts/build.mjs",
+    "format": "prettier --write \"**/*.html\" \"src/**/*.js\" \"scripts/**/*.mjs\" script.js",
+    "format:check": "prettier --check \"**/*.html\" \"src/**/*.js\" \"scripts/**/*.mjs\" script.js",
+    "build": "npm run build:html && npm run format",
+    "verify:generated": "node scripts/verify-generated.mjs"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
