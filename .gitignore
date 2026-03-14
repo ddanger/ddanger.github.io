@@ -2,5 +2,8 @@
 David Dangerfield Resume.txt
 automated-recruiter-response.txt
 
+# Dependencies
+node_modules/
+
 # macOS
 .DS_Store

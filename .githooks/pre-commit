@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+# BUILD-TIME: pre-commit hook — regenerates and format-checks generated HTML.
+# Installed automatically when you run: npm install
+set -e
+
+npm run build
+npm run format:check

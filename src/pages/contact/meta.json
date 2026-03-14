@@ -1,0 +1,19 @@
+{
+  "outputPath": "contact/index.html",
+  "meta": {
+    "title": "Schedule a Web Development Consultation | St. Paul | David Dangerfield",
+    "description": "Schedule a consultation with David Dangerfield, a West St. Paul web development partner serving Twin Cities and remote teams.",
+    "canonical": "https://daviddangerfield.com/contact/",
+    "og": {
+      "title": "Schedule a Web Development Consultation",
+      "description": "Book a consultation for website modernization, technical SEO foundations, and implementation-focused web delivery.",
+      "type": "website",
+      "url": "https://daviddangerfield.com/contact/"
+    }
+  },
+  "footer": {
+    "scheduleHref": "/schedule/",
+    "scheduleTarget": "_blank",
+    "scheduleRel": "noreferrer"
+  }
+}

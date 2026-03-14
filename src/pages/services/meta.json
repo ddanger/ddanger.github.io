@@ -1,0 +1,19 @@
+{
+  "outputPath": "services/index.html",
+  "meta": {
+    "title": "St. Paul and Twin Cities Web Development Services | David Dangerfield",
+    "description": "St. Paul and Twin Cities web development services: website modernization, technical SEO foundations, and implementation-focused delivery.",
+    "canonical": "https://daviddangerfield.com/services/",
+    "og": {
+      "title": "St. Paul and Twin Cities Web Development Services",
+      "description": "Implementation-focused website modernization, technical SEO, and frontend delivery for Minnesota businesses and teams.",
+      "type": "website",
+      "url": "https://daviddangerfield.com/services/"
+    }
+  },
+  "footer": {
+    "scheduleHref": "/contact/",
+    "scheduleTarget": null,
+    "scheduleRel": null
+  }
+}

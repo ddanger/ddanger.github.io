@@ -1,3 +1,4 @@
+/* Design tokens */
 :root {
   --sand: #f3efe7;
   --ink: #111111;
@@ -13,6 +14,7 @@
   --shadow-soft: 0 12px 40px rgba(17, 17, 17, 0.1);
 }
 
+/* Base reset and document defaults */
 * {
   box-sizing: border-box;
 }
@@ -40,11 +42,13 @@ img {
   display: block;
 }
 
+/* Layout primitives */
 .container {
   width: min(var(--max-width), calc(100% - 2rem));
   margin: 0 auto;
 }
 
+/* Header and navigation */
 .site-header {
   position: sticky;
   top: 0;
@@ -120,6 +124,7 @@ img {
   cursor: pointer;
 }
 
+/* Hero and page-specific intros */
 .hero {
   padding: 4.5rem 0 3rem;
 }
@@ -174,6 +179,7 @@ img {
   padding: 2rem;
 }
 
+/* Typography and shared content patterns */
 .kicker {
   text-transform: uppercase;
   font-size: 0.78rem;
@@ -214,6 +220,7 @@ h2 {
   gap: 0.8rem;
 }
 
+/* Buttons and interactive controls */
 .btn {
   text-decoration: none;
   font-weight: 700;
@@ -253,6 +260,7 @@ h2 {
   flex-shrink: 0;
 }
 
+/* Accent panel */
 .accent-card {
   padding: 1.6rem;
   background: linear-gradient(155deg, #f2c14e 0%, #c65d2e 100%);
@@ -283,6 +291,7 @@ h2 {
   line-height: 1;
 }
 
+/* Sections and content modules */
 .section {
   padding: 4.4rem 0;
 }
@@ -359,6 +368,7 @@ h2 {
   font-size: 0.9rem;
 }
 
+/* Footer */
 .site-footer {
   border-top: 1px solid #ddd2c3;
   padding: 2rem 0;
@@ -435,6 +445,7 @@ h2 {
   margin-top: 0.25rem;
 }
 
+/* Reveal animation utility */
 .reveal {
   opacity: 0;
   transform: translateY(22px);
@@ -448,6 +459,7 @@ h2 {
   transform: translateY(0);
 }
 
+/* Responsive: tablet and down */
 @media (max-width: 900px) {
   .hero-grid,
   .grid-3 {
@@ -469,6 +481,7 @@ h2 {
   }
 }
 
+/* Responsive: mobile nav */
 @media (max-width: 760px) {
   .nav-toggle {
     display: inline-flex;
