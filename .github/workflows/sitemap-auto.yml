@@ -35,14 +35,30 @@ jobs:
         run: node scripts/generate-sitemap.mjs
 
       - name: Commit sitemap changes
+        env:
+          MAIN_PUSH_TOKEN: ${{ secrets.MAIN_PUSH_TOKEN }}
         run: |
-          if git diff --quiet -- sitemap.xml; then
-            echo "No sitemap changes detected."
+          if [[ -z "${MAIN_PUSH_TOKEN}" ]]; then
+            echo "MAIN_PUSH_TOKEN is not set. Add it in repository secrets."
+            exit 1
+          fi
+
+          changed_files="$(git diff --name-only)"
+          if [[ -z "${changed_files}" ]]; then
+            echo "No repository changes detected."
             exit 0
+          fi
+
+          unexpected_changes="$(printf '%s\n' "${changed_files}" | grep -Ev '^sitemap\.xml$' || true)"
+          if [[ -n "${unexpected_changes}" ]]; then
+            echo "Refusing to push unexpected file changes:"
+            printf '%s\n' "${unexpected_changes}"
+            exit 1
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${MAIN_PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git add sitemap.xml
           git commit -m "chore: auto-update sitemap"
           git push
