@@ -14,7 +14,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   sync-generated-output:
@@ -36,21 +35,31 @@ jobs:
       - name: Build generated output
         run: npm run build
 
-      - name: Create generated-output sync PR
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'chore: sync generated output'
-          branch: chore/generated-output-sync
-          delete-branch: true
-          title: 'chore: sync generated output'
-          body: |
-            Automated update for generated HTML artifacts.
+      - name: Commit generated output changes
+        env:
+          MAIN_PUSH_TOKEN: ${{ secrets.MAIN_PUSH_TOKEN }}
+        run: |
+          if [[ -z "${MAIN_PUSH_TOKEN}" ]]; then
+            echo "MAIN_PUSH_TOKEN is not set. Add it in repository secrets."
+            exit 1
+          fi
 
-            - Triggered by source-level changes merged to `main`
-            - Regenerated with `npm run build`
-          add-paths: |
-            index.html
-            about/index.html
-            services/index.html
-            contact/index.html
+          changed_files="$(git diff --name-only)"
+          if [[ -z "${changed_files}" ]]; then
+            echo "No generated output changes detected."
+            exit 0
+          fi
+
+          unexpected_changes="$(printf '%s\n' "${changed_files}" | grep -Ev '^(index\.html|about/index\.html|services/index\.html|contact/index\.html)$' || true)"
+          if [[ -n "${unexpected_changes}" ]]; then
+            echo "Refusing to push unexpected file changes:"
+            printf '%s\n' "${unexpected_changes}"
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${MAIN_PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git add index.html about/index.html services/index.html contact/index.html
+          git commit -m "chore: sync generated output"
+          git push
