@@ -1,0 +1,56 @@
+name: Generated Output Sync
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'scripts/build.mjs'
+      - 'src/site.json'
+      - 'src/partials/**'
+      - '.github/workflows/generated-output-sync.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-generated-output:
+    name: Sync Generated Output
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build generated output
+        run: npm run build
+
+      - name: Create generated-output sync PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: sync generated output'
+          branch: chore/generated-output-sync
+          delete-branch: true
+          title: 'chore: sync generated output'
+          body: |
+            Automated update for generated HTML artifacts.
+
+            - Triggered by source-level changes merged to `main`
+            - Regenerated with `npm run build`
+          add-paths: |
+            index.html
+            about/index.html
+            services/index.html
+            contact/index.html

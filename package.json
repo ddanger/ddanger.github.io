@@ -5,6 +5,9 @@
   "scripts": {
     "prepare": "git config core.hooksPath .githooks && chmod +x .githooks/pre-commit",
     "build:html": "node scripts/build.mjs",
+    "validate:source": "node scripts/validate-source.mjs",
+    "generate:sitemap": "node scripts/generate-sitemap.mjs",
+    "check:uptime": "node scripts/uptime-check.mjs",
     "format": "prettier --write \"**/*.html\" \"src/**/*.js\" \"scripts/**/*.mjs\" script.js",
     "format:check": "prettier --check \"**/*.html\" \"src/**/*.js\" \"scripts/**/*.mjs\" script.js",
     "build": "npm run build:html && npm run format",

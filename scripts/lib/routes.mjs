@@ -1,0 +1,55 @@
+import { readdir, readFile } from 'node:fs/promises'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const SCRIPTS_DIR = dirname(fileURLToPath(import.meta.url))
+const ROOT_DIR = join(SCRIPTS_DIR, '..', '..')
+const PAGES_DIR = join(ROOT_DIR, 'src', 'pages')
+
+export const HELPER_ROUTES = new Set(['/schedule/', '/cv/', '/resume/'])
+
+export function outputPathToRoute(outputPath) {
+  if (outputPath === 'index.html') return '/'
+  if (outputPath.endsWith('/index.html')) {
+    return `/${outputPath.slice(0, -'index.html'.length)}`
+  }
+  return `/${outputPath}`
+}
+
+export function isIndexable(meta) {
+  const robots = String(meta?.meta?.robots || '').toLowerCase()
+  return !robots.includes('noindex')
+}
+
+export async function discoverPages(rootDir = ROOT_DIR) {
+  const pagesDir = join(rootDir, 'src', 'pages')
+  const entries = await readdir(pagesDir, { withFileTypes: true })
+  const pageIds = entries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort()
+
+  const pages = []
+  for (const pageId of pageIds) {
+    const pageDir = join(pagesDir, pageId)
+    const metaPath = join(pageDir, 'meta.json')
+    const contentPath = join(pageDir, 'content.html')
+
+    const meta = JSON.parse(await readFile(metaPath, 'utf8'))
+    const route = outputPathToRoute(meta.outputPath)
+
+    pages.push({
+      pageId,
+      pageDir,
+      metaPath,
+      contentPath,
+      meta,
+      route,
+      indexable: isIndexable(meta),
+    })
+  }
+
+  return pages
+}
+
+export { ROOT_DIR, PAGES_DIR }
