@@ -103,14 +103,20 @@ Trigger:
 Behavior:
 
 - Runs `npm run build`
-- Opens an automated PR if generated HTML artifacts drift from `main`
-- Keeps generated-output sync separate and reviewable under branch protection
+- Commits generated HTML artifacts directly to `main` only when changed
+
+## Branch Protection Requirement
+
+Post-merge automation workflows (`sitemap-auto.yml`, `generated-output-sync.yml`) push directly to `main`.
+
+If your ruleset does not allow GitHub Actions as a bypass actor, add `Repository admin` to bypass and use a personal token secret for workflow pushes.
 
 ## Required Secret
 
 Set repository secret:
 
 - `SLACK_WEBHOOK_URL`
+- `MAIN_PUSH_TOKEN` (fine-grained PAT with repository Contents: Read and write)
 
 Path:
 
@@ -145,7 +151,7 @@ Path:
 
 - Run `npm run build`
 - Re-run `npm run verify:generated`
-- Confirm generated files are committed (or allow generated-output-sync PR to handle updates)
+- Confirm generated files are committed (or allow post-merge sync workflow to commit updates)
 
 ### Sitemap mismatch
 
