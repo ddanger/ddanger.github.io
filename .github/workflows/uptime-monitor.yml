@@ -1,0 +1,70 @@
+name: Uptime Monitor
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    name: Uptime Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Run uptime checks
+        id: uptime
+        continue-on-error: true
+        env:
+          SITE_URL: https://daviddangerfield.com
+        run: |
+          set +e
+          output=$(node scripts/uptime-check.mjs 2>&1)
+          status=$?
+          echo "$output"
+          {
+            echo "summary<<EOF"
+            echo "$output"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          exit $status
+
+      - name: Add job summary
+        if: always()
+        run: |
+          {
+            echo "## Uptime Check Results"
+            echo
+            echo "${{ steps.uptime.outputs.summary }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Notify Slack on failure
+        if: steps.uptime.outcome == 'failure'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
+            echo "SLACK_WEBHOOK_URL is not set; skipping Slack notification."
+            exit 0
+          fi
+
+          payload=$(cat <<EOF
+          {
+            "text": "Uptime monitor failed for daviddangerfield.com. See run: ${RUN_URL}"
+          }
+          EOF
+          )
+          curl -sS -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            --data "$payload"
+
+      - name: Mark workflow failed
+        if: steps.uptime.outcome == 'failure'
+        run: exit 1
