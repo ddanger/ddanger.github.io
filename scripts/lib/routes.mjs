@@ -35,8 +35,18 @@ export async function discoverPages(rootDir = ROOT_DIR) {
     const metaPath = join(pageDir, 'meta.json')
     const contentPath = join(pageDir, 'content.html')
 
-    const meta = JSON.parse(await readFile(metaPath, 'utf8'))
-    const route = outputPathToRoute(meta.outputPath)
+    let meta = null
+    let metaError = null
+    let route = null
+
+    try {
+      meta = JSON.parse(await readFile(metaPath, 'utf8'))
+      if (typeof meta?.outputPath === 'string' && meta.outputPath.length > 0) {
+        route = outputPathToRoute(meta.outputPath)
+      }
+    } catch (err) {
+      metaError = err instanceof Error ? err.message : String(err)
+    }
 
     pages.push({
       pageId,
@@ -44,8 +54,9 @@ export async function discoverPages(rootDir = ROOT_DIR) {
       metaPath,
       contentPath,
       meta,
+      metaError,
       route,
-      indexable: isIndexable(meta),
+      indexable: meta ? isIndexable(meta) : false,
     })
   }
 

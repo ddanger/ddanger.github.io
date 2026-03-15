@@ -88,15 +88,16 @@ async function fileExists(absPath) {
 async function validateAbsoluteRef(target, knownRoutes) {
   const clean = stripHashAndQuery(target)
   if (!clean) return true
+  const cleanPath = clean.startsWith('/') ? clean.slice(1) : clean
 
   if (clean.endsWith('/')) {
     if (knownRoutes.has(clean)) return true
-    const indexCandidate = path.join(ROOT_DIR, clean, 'index.html')
+    const indexCandidate = path.join(ROOT_DIR, cleanPath, 'index.html')
     return fileExists(indexCandidate)
   }
 
-  const hasExt = Boolean(path.extname(clean))
-  const abs = path.join(ROOT_DIR, clean)
+  const hasExt = Boolean(path.extname(cleanPath))
+  const abs = path.join(ROOT_DIR, cleanPath)
 
   if (hasExt) return fileExists(abs)
 
@@ -137,7 +138,7 @@ async function main() {
   const site = JSON.parse(await readFile(path.join(ROOT_DIR, 'src', 'site.json'), 'utf8'))
 
   if (!/^G-[A-Z0-9]{6,}$/.test(String(site.gaId || ''))) {
-    errors.push('src/site.json: gaId must match pattern G-XXXXXXXX')
+    errors.push('src/site.json: gaId must match pattern G-XXXXXX (6+ uppercase alphanumerics)')
   }
 
   const pages = await discoverPages(ROOT_DIR)
@@ -146,7 +147,12 @@ async function main() {
   const outputPaths = new Set()
 
   for (const page of pages) {
-    knownRoutes.add(page.route)
+    if (page.route) knownRoutes.add(page.route)
+
+    if (page.metaError) {
+      errors.push(`${page.pageId}: invalid or unreadable meta.json (${page.metaError})`)
+      continue
+    }
 
     try {
       await access(page.metaPath, fsConstants.F_OK)
@@ -164,18 +170,20 @@ async function main() {
 
     if (!page.meta.outputPath || typeof page.meta.outputPath !== 'string') {
       errors.push(`${page.pageId}: outputPath must be a non-empty string`)
+    } else {
+      if (outputPaths.has(page.meta.outputPath)) {
+        errors.push(`${page.pageId}: duplicate outputPath ${page.meta.outputPath}`)
+      }
+      outputPaths.add(page.meta.outputPath)
     }
-
-    if (outputPaths.has(page.meta.outputPath)) {
-      errors.push(`${page.pageId}: duplicate outputPath ${page.meta.outputPath}`)
-    }
-    outputPaths.add(page.meta.outputPath)
 
     const canonical = page.meta?.meta?.canonical
-    if (canonicalUrls.has(canonical)) {
-      errors.push(`${page.pageId}: duplicate canonical URL ${canonical}`)
+    if (typeof canonical === 'string' && canonical.length > 0) {
+      if (canonicalUrls.has(canonical)) {
+        errors.push(`${page.pageId}: duplicate canonical URL ${canonical}`)
+      }
+      canonicalUrls.add(canonical)
     }
-    canonicalUrls.add(canonical)
 
     validateCanonical(page.meta, page.pageId, errors)
   }
@@ -183,7 +191,15 @@ async function main() {
   const refTargets = []
 
   for (const page of pages) {
-    const source = await readFile(page.contentPath, 'utf8')
+    if (page.metaError || !page.route) continue
+
+    let source
+    try {
+      source = await readFile(page.contentPath, 'utf8')
+    } catch {
+      errors.push(`${toRel(page.contentPath)}: content.html is missing or unreadable`)
+      continue
+    }
     const refs = extractRefs(source)
 
     for (const item of refs) {

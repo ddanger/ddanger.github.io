@@ -55,6 +55,7 @@ function printSummary(results) {
 async function discoverUptimeRoutes() {
   const pages = await discoverPages(ROOT_DIR)
   const routes = pages
+    .filter((page) => !page.metaError && typeof page.route === 'string')
     .filter((page) => page.indexable)
     .map((page) => page.route)
     .filter((route) => route.endsWith('/'))

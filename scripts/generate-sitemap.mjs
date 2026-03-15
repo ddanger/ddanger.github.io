@@ -40,6 +40,7 @@ async function main() {
   const routes = []
 
   for (const page of pages) {
+    if (page.metaError || !page.route) continue
     if (!page.indexable) continue
     if (!page.route.endsWith('/')) continue
     if (HELPER_ROUTES.has(page.route)) continue
