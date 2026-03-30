@@ -81,7 +81,9 @@ function parseArgs(argv) {
     }
 
     if (token === '--help' || token === '-h') {
-      console.log(`\nUsage: node scripts/generate-resume-share.mjs --input <path> [options]\n\nOptions:\n  --output <path>        Output image path (default: images/social/resume-share.png)\n  --title <text>         Main banner text (default: David Dangerfield)\n  --subtitle <text>      Sub text under title (default: Download Resume (PDF))\n  --font-bold <path>     Font file for title\n  --font-regular <path>  Font file for subtitle\n  -h, --help             Show help\n`)
+      console.log(
+        `\nUsage: node scripts/generate-resume-share.mjs --input <path> [options]\n\nOptions:\n  --output <path>        Output image path (default: images/social/resume-share.png)\n  --title <text>         Main banner text (default: David Dangerfield)\n  --subtitle <text>      Sub text under title (default: Download Resume (PDF))\n  --font-bold <path>     Font file for title\n  --font-regular <path>  Font file for subtitle\n  -h, --help             Show help\n`,
+      )
       process.exit(0)
     }
 
