@@ -25,6 +25,7 @@ import { tmpdir } from 'node:os'
 
 const SCRIPTS_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT_DIR = join(SCRIPTS_DIR, '..')
+const FAVICON_PATH = 'favicon-48x48.png'
 
 function fail(message) {
   console.error(`Error: ${message}`)
@@ -35,8 +36,7 @@ function parseArgs(argv) {
   const args = {
     input: '',
     output: 'images/social/resume-share.png',
-    title: 'David Dangerfield',
-    subtitle: 'Download Resume (PDF)',
+    title: 'David Dangerfield Resume',
     fontBold: '/System/Library/Fonts/Supplemental/Arial Bold.ttf',
     fontRegular: '/System/Library/Fonts/Supplemental/Arial.ttf',
   }
@@ -62,12 +62,6 @@ function parseArgs(argv) {
       continue
     }
 
-    if (token === '--subtitle') {
-      args.subtitle = argv[i + 1] || args.subtitle
-      i += 1
-      continue
-    }
-
     if (token === '--font-bold') {
       args.fontBold = argv[i + 1] || args.fontBold
       i += 1
@@ -82,7 +76,7 @@ function parseArgs(argv) {
 
     if (token === '--help' || token === '-h') {
       console.log(
-        `\nUsage: node scripts/generate-resume-share.mjs --input <path> [options]\n\nOptions:\n  --output <path>        Output image path (default: images/social/resume-share.png)\n  --title <text>         Main banner text (default: David Dangerfield)\n  --subtitle <text>      Sub text under title (default: Download Resume (PDF))\n  --font-bold <path>     Font file for title\n  --font-regular <path>  Font file for subtitle\n  -h, --help             Show help\n`,
+        `\nUsage: node scripts/generate-resume-share.mjs --input <path> [options]\n\nOptions:\n  --output <path>        Output image path (default: images/social/resume-share.png)\n  --title <text>         Main banner text (default: David Dangerfield Resume)\n  --font-bold <path>     Font file for title\n  --font-regular <path>  Font file for (PDF) label\n  -h, --help             Show help\n`,
       )
       process.exit(0)
     }
@@ -153,25 +147,58 @@ async function prepareInputSource(inputAbs) {
   return { sourcePath, tempDir }
 }
 
-function runFfmpeg({ inputAbs, outputAbs, title, subtitle, fontBoldAbs, fontRegularAbs }) {
+function runFfmpeg({ inputAbs, outputAbs, title, fontBoldAbs, fontRegularAbs, faviconAbs }) {
   const titleEscaped = escapeDrawText(title)
-  const subtitleEscaped = escapeDrawText(subtitle)
 
-  const filter = [
-    'scale=464:600:flags=lanczos',
-    'pad=1200:724:(ow-iw)/2:124:color=0xBFC3C8',
-    'crop=1200:630:0:0',
-    'gblur=sigma=6',
-    'drawbox=x=0:y=0:w=iw:h=ih:color=black@0.06:t=fill',
-    'drawbox=x=368:y=124:w=464:h=506:color=white@0.22:t=fill',
-    'drawbox=x=0:y=0:w=iw:h=124:color=black@0.48:t=fill',
-    `drawtext=fontfile='${fontBoldAbs}':text='${titleEscaped}':fontcolor=white:fontsize=56:x=(w-text_w)/2:y=20`,
-    `drawtext=fontfile='${fontRegularAbs}':text='${subtitleEscaped}':fontcolor=white@0.90:fontsize=24:x=(w-text_w)/2:y=84`,
+  const sceneFilter =
+    [
+      '[0:v]scale=464:600:flags=lanczos',
+      'pad=1200:748:(ow-iw)/2:148:color=0xBFC3C8',
+      'crop=1200:630:0:0',
+      'gblur=sigma=3',
+      'drawbox=x=0:y=0:w=iw:h=ih:color=black@0.06:t=fill',
+      'drawbox=x=368:y=148:w=464:h=482:color=white@0.22:t=fill',
+    ].join(',') + '[scene]'
+
+  const bannerFilter = [
+    "[2:v]format=rgba,geq=r='44-23*Y/147':g='133-39*Y/147':b='138-39*Y/147':a='255'[banner]",
   ].join(',')
+
+  const textFilter =
+    [
+      '[with_banner]drawbox=x=0:y=140:w=iw:h=8:color=0xC65D2E@0.95:t=fill',
+      'drawbox=x=iw-82:y=40:w=52:h=52:color=0xFFFAF2@0.12:t=fill',
+      `drawtext=fontfile='${fontBoldAbs}':text='${titleEscaped}':fontcolor=0xFFFAF2:fontsize=54:x=(w-text_w)/2-18:y=42`,
+      `drawtext=fontfile='${fontRegularAbs}':text='(PDF)':fontcolor=0xE89C73:fontsize=28:x=(w+text_w)/2+320:y=54`,
+    ].join(',') + '[base]'
+
+  const logoFilter = '[1:v]scale=40:40:flags=lanczos,format=rgba[logo]'
+  const composeFilter = '[scene][banner]overlay=x=0:y=0[with_banner]'
+  const overlayFilter = '[base][logo]overlay=x=main_w-76:y=46:format=auto[out]'
+  const filterComplex = `${sceneFilter};${bannerFilter};${composeFilter};${textFilter};${logoFilter};${overlayFilter}`
 
   const result = spawnSync(
     'ffmpeg',
-    ['-y', '-i', inputAbs, '-vf', filter, '-frames:v', '1', '-update', '1', outputAbs],
+    [
+      '-y',
+      '-i',
+      inputAbs,
+      '-i',
+      faviconAbs,
+      '-f',
+      'lavfi',
+      '-i',
+      'color=c=black:s=1200x148',
+      '-filter_complex',
+      filterComplex,
+      '-map',
+      '[out]',
+      '-frames:v',
+      '1',
+      '-update',
+      '1',
+      outputAbs,
+    ],
     { stdio: 'inherit' },
   )
 
@@ -191,11 +218,13 @@ async function main() {
   const outputAbs = toAbsolute(args.output)
   const fontBoldAbs = toAbsolute(args.fontBold)
   const fontRegularAbs = toAbsolute(args.fontRegular)
+  const faviconAbs = toAbsolute(FAVICON_PATH)
 
   ensureFfmpegInstalled()
   await ensureReadable(inputAbs, 'Input image')
   await ensureReadable(fontBoldAbs, 'Bold font')
   await ensureReadable(fontRegularAbs, 'Regular font')
+  await ensureReadable(faviconAbs, 'Favicon image')
   await mkdir(dirname(outputAbs), { recursive: true })
 
   const prepared = await prepareInputSource(inputAbs)
@@ -204,9 +233,9 @@ async function main() {
     inputAbs: prepared.sourcePath,
     outputAbs,
     title: args.title,
-    subtitle: args.subtitle,
     fontBoldAbs,
     fontRegularAbs,
+    faviconAbs,
   })
 
   if (prepared.tempDir) {
