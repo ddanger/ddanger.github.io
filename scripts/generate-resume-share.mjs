@@ -37,7 +37,7 @@ function parseArgs(argv) {
     input: '',
     output: 'images/social/resume-share.png',
     title: 'David Dangerfield Resume',
-    fontBold: '/System/Library/Fonts/Supplemental/Arial Bold.ttf',
+    fontBold: '/System/Library/Fonts/Supplemental/Georgia Bold.ttf',
     fontRegular: '/System/Library/Fonts/Supplemental/Arial.ttf',
   }
 
@@ -152,30 +152,42 @@ function runFfmpeg({ inputAbs, outputAbs, title, fontBoldAbs, fontRegularAbs, fa
 
   const sceneFilter =
     [
-      '[0:v]scale=464:600:flags=lanczos',
-      'pad=1200:748:(ow-iw)/2:148:color=0xBFC3C8',
-      'crop=1200:630:0:0',
-      'gblur=sigma=3',
-      'drawbox=x=0:y=0:w=iw:h=ih:color=black@0.06:t=fill',
-      'drawbox=x=368:y=148:w=464:h=482:color=white@0.22:t=fill',
+      'color=c=0xFFFAF2:s=1200x630',
+      'format=rgba',
+      "geq=r='clip(255+(21-255)*0.14*max(0,1-sqrt((X-180)*(X-180)+(Y-126)*(Y-126))/480)+(198-255)*0.12*max(0,1-sqrt((X-960)*(X-960)+(Y-63)*(Y-63))/540),0,255)':g='clip(250+(94-250)*0.14*max(0,1-sqrt((X-180)*(X-180)+(Y-126)*(Y-126))/480)+(93-250)*0.12*max(0,1-sqrt((X-960)*(X-960)+(Y-63)*(Y-63))/540),0,255)':b='clip(242+(99-242)*0.14*max(0,1-sqrt((X-180)*(X-180)+(Y-126)*(Y-126))/480)+(46-242)*0.12*max(0,1-sqrt((X-960)*(X-960)+(Y-63)*(Y-63))/540),0,255)':a='255'",
+      'format=rgba',
+      'colorchannelmixer=aa=1',
+      'drawbox=x=290:y=164:w=620:h=468:color=0x111111@0.06:t=fill',
+      'drawbox=x=286:y=154:w=628:h=470:color=0xFFFAF2@0.92:t=fill',
+      'drawbox=x=286:y=154:w=628:h=470:color=0xD9D1C3@0.78:t=2',
     ].join(',') + '[scene]'
 
+  const documentFilter =
+    [
+      '[0:v]scale=604:782:flags=lanczos',
+      'crop=604:446:0:0',
+      'gblur=sigma=4',
+      'format=rgba',
+      'colorchannelmixer=aa=0.9',
+    ].join(',') + '[doc]'
+
   const bannerFilter = [
-    "[2:v]format=rgba,geq=r='44-23*Y/147':g='133-39*Y/147':b='138-39*Y/147':a='255'[banner]",
+    "[2:v]format=rgba,geq=r='21+18*Y/147':g='94+27*Y/147':b='99+11*Y/147':a='255'[banner]",
   ].join(',')
 
   const textFilter =
     [
-      '[with_banner]drawbox=x=0:y=140:w=iw:h=8:color=0xC65D2E@0.95:t=fill',
-      'drawbox=x=iw-82:y=40:w=52:h=52:color=0xFFFAF2@0.12:t=fill',
-      `drawtext=fontfile='${fontBoldAbs}':text='${titleEscaped}':fontcolor=0xFFFAF2:fontsize=54:x=(w-text_w)/2-18:y=42`,
-      `drawtext=fontfile='${fontRegularAbs}':text='(PDF)':fontcolor=0xE89C73:fontsize=28:x=(w+text_w)/2+320:y=54`,
+      '[with_banner]drawbox=x=0:y=140:w=iw:h=7:color=0xC65D2E@0.98:t=fill',
+      'drawbox=x=iw-76:y=13:w=60:h=60:color=0xFFFAF2@0.18:t=fill',
+      `drawtext=fontfile='${fontBoldAbs}':text='${titleEscaped}':fontcolor=0xFFFAF2:fontsize=60:x=80:y=45`,
+      `drawtext=fontfile='${fontBoldAbs}':text='PDF':fontcolor=0xF2C14E:fontsize=42:x=955:y=60`,
     ].join(',') + '[base]'
 
-  const logoFilter = '[1:v]scale=40:40:flags=lanczos,format=rgba[logo]'
-  const composeFilter = '[scene][banner]overlay=x=0:y=0[with_banner]'
-  const overlayFilter = '[base][logo]overlay=x=main_w-76:y=46:format=auto[out]'
-  const filterComplex = `${sceneFilter};${bannerFilter};${composeFilter};${textFilter};${logoFilter};${overlayFilter}`
+  const logoFilter = '[1:v]scale=46:46:flags=lanczos,format=rgba[logo]'
+  const composeFilter = '[scene][doc]overlay=x=(main_w-overlay_w)/2:y=166[with_doc]'
+  const bannerComposeFilter = '[with_doc][banner]overlay=x=0:y=0[with_banner]'
+  const overlayFilter = '[base][logo]overlay=x=main_w-69:y=20:format=auto[out]'
+  const filterComplex = `${sceneFilter};${documentFilter};${bannerFilter};${composeFilter};${bannerComposeFilter};${textFilter};${logoFilter};${overlayFilter}`
 
   const result = spawnSync(
     'ffmpeg',
