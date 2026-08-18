@@ -39,6 +39,7 @@ function parseArgs(argv) {
     title: 'David Dangerfield Resume',
     fontBold: '/System/Library/Fonts/Supplemental/Georgia Bold.ttf',
     fontRegular: '/System/Library/Fonts/Supplemental/Arial.ttf',
+    ffmpegBin: '',
   }
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -74,9 +75,15 @@ function parseArgs(argv) {
       continue
     }
 
+    if (token === '--ffmpeg-bin') {
+      args.ffmpegBin = argv[i + 1] || args.ffmpegBin
+      i += 1
+      continue
+    }
+
     if (token === '--help' || token === '-h') {
       console.log(
-        `\nUsage: node scripts/generate-resume-share.mjs --input <path> [options]\n\nOptions:\n  --output <path>        Output image path (default: images/social/resume-share.png)\n  --title <text>         Main banner text (default: David Dangerfield Resume)\n  --font-bold <path>     Font file for title\n  --font-regular <path>  Font file for (PDF) label\n  -h, --help             Show help\n`,
+        `\nUsage: node scripts/generate-resume-share.mjs --input <path> [options]\n\nOptions:\n  --output <path>        Output image path (default: images/social/resume-share.png)\n  --title <text>         Main banner text (default: David Dangerfield Resume)\n  --font-bold <path>     Font file for title\n  --font-regular <path>  Font file for (PDF) label\n  --ffmpeg-bin <path>    Override ffmpeg binary path\n  -h, --help             Show help\n`,
       )
       process.exit(0)
     }
@@ -111,11 +118,55 @@ async function ensureReadable(pathToFile, label) {
   }
 }
 
-function ensureFfmpegInstalled() {
-  const check = spawnSync('ffmpeg', ['-version'], { encoding: 'utf8' })
+function checkCommand(bin, args) {
+  return spawnSync(bin, args, { encoding: 'utf8' })
+}
+
+function hasDrawtextFilter(ffmpegBin) {
+  const check = checkCommand(ffmpegBin, ['-hide_banner', '-filters'])
   if (check.error || check.status !== 0) {
-    fail('ffmpeg is required but was not found on PATH.')
+    return false
   }
+
+  return check.stdout.includes('drawtext')
+}
+
+function resolveFfmpegBin(preferredBin = '') {
+  const candidates = [
+    preferredBin,
+    process.env.FFMPEG_BIN || '',
+    'ffmpeg',
+    process.platform === 'darwin' ? '/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg' : '',
+  ]
+
+  const seen = new Set()
+  const foundWithoutDrawtext = []
+
+  for (const candidate of candidates) {
+    if (!candidate || seen.has(candidate)) {
+      continue
+    }
+    seen.add(candidate)
+
+    const versionCheck = checkCommand(candidate, ['-version'])
+    if (versionCheck.error || versionCheck.status !== 0) {
+      continue
+    }
+
+    if (hasDrawtextFilter(candidate)) {
+      return candidate
+    }
+
+    foundWithoutDrawtext.push(candidate)
+  }
+
+  if (foundWithoutDrawtext.length > 0) {
+    fail(
+      `ffmpeg was found but does not include the drawtext filter (${foundWithoutDrawtext.join(', ')}). Install Homebrew ffmpeg-full and ensure /opt/homebrew/opt/ffmpeg-full/bin is in PATH, or pass --ffmpeg-bin /opt/homebrew/opt/ffmpeg-full/bin/ffmpeg.`,
+    )
+  }
+
+  fail('ffmpeg is required but was not found on PATH. Install ffmpeg-full with Homebrew.')
 }
 
 function ensureSipsInstalled() {
@@ -147,7 +198,15 @@ async function prepareInputSource(inputAbs) {
   return { sourcePath, tempDir }
 }
 
-function runFfmpeg({ inputAbs, outputAbs, title, fontBoldAbs, fontRegularAbs, faviconAbs }) {
+function runFfmpeg({
+  ffmpegBin,
+  inputAbs,
+  outputAbs,
+  title,
+  fontBoldAbs,
+  fontRegularAbs,
+  faviconAbs,
+}) {
   const titleEscaped = escapeDrawText(title)
 
   const sceneFilter =
@@ -190,7 +249,7 @@ function runFfmpeg({ inputAbs, outputAbs, title, fontBoldAbs, fontRegularAbs, fa
   const filterComplex = `${sceneFilter};${documentFilter};${bannerFilter};${composeFilter};${bannerComposeFilter};${textFilter};${logoFilter};${overlayFilter}`
 
   const result = spawnSync(
-    'ffmpeg',
+    ffmpegBin,
     [
       '-y',
       '-i',
@@ -231,8 +290,8 @@ async function main() {
   const fontBoldAbs = toAbsolute(args.fontBold)
   const fontRegularAbs = toAbsolute(args.fontRegular)
   const faviconAbs = toAbsolute(FAVICON_PATH)
+  const ffmpegBin = resolveFfmpegBin(args.ffmpegBin)
 
-  ensureFfmpegInstalled()
   await ensureReadable(inputAbs, 'Input image')
   await ensureReadable(fontBoldAbs, 'Bold font')
   await ensureReadable(fontRegularAbs, 'Regular font')
@@ -242,6 +301,7 @@ async function main() {
   const prepared = await prepareInputSource(inputAbs)
 
   runFfmpeg({
+    ffmpegBin,
     inputAbs: prepared.sourcePath,
     outputAbs,
     title: args.title,
