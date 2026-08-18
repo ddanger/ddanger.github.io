@@ -1,12 +1,12 @@
 {
   "outputPath": "about/index.html",
   "meta": {
-    "title": "About | Twin Cities Web Development Partner | David Dangerfield",
-    "description": "About David Dangerfield, a Twin Cities software engineer with 20+ years of software and systems delivery experience.",
+    "title": "About | Full Stack Software Engineer | David Dangerfield",
+    "description": "About David Dangerfield, a Twin Cities full stack software engineer with 20+ years of software, systems, and delivery experience.",
     "canonical": "https://daviddangerfield.com/about/",
     "og": {
-      "title": "About David Dangerfield | Twin Cities Web Development Partner",
-      "description": "Engineering-first website delivery from the Twin Cities, with 20+ years of production software experience.",
+      "title": "About David Dangerfield | Full Stack Software Engineer",
+      "description": "Software engineering from the Twin Cities, with 20+ years of enterprise software, systems, and delivery experience.",
       "type": "profile",
       "url": "https://daviddangerfield.com/about/"
     }

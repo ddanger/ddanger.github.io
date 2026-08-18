@@ -1,13 +1,13 @@
 {
   "outputPath": "index.html",
   "meta": {
-    "title": "David Dangerfield | Twin Cities Web Strategy & Development",
-    "description": "Websites that earn trust, load fast, and drive measurable business results. Built with foresight from 20+ years experience.",
-    "keywords": "Twin Cities web development, Minnesota website modernization, technical SEO consultant",
+    "title": "David Dangerfield | Full Stack Software Engineer",
+    "description": "Full stack application development, modernization, integrations, and delivery from a Twin Cities software engineer with 20+ years of experience.",
+    "keywords": "Twin Cities full stack developer, Minnesota software engineer, web application modernization, API integration consultant",
     "canonical": "https://daviddangerfield.com/",
     "og": {
-      "title": "Websites that Draw Visitors and Secure Clients",
-      "description": "Twin Cities web strategy and development focused on turning site improvements into measurable results.",
+      "title": "Full Stack Software Engineer for Digital Products and Business Systems",
+      "description": "Twin Cities software engineering focused on application modernization, integrations, technical quality, and reliable delivery.",
       "type": "website",
       "url": "https://daviddangerfield.com/",
       "siteName": "David Dangerfield",
@@ -21,8 +21,8 @@
     },
     "twitter": {
       "card": "summary_large_image",
-      "title": "David Dangerfield | Strategic Web Implementation",
-      "description": "Modern website builds and upgrades with practical execution, technical depth, and measurable impact.",
+      "title": "David Dangerfield | Full Stack Software Engineer",
+      "description": "Application modernization, integrations, and technical delivery with practical execution and measurable impact.",
       "image": "https://daviddangerfield.com/images/social/social-share.jpg",
       "imageAlt": "Social sharing card image for David Dangerfield."
     }
@@ -31,7 +31,7 @@
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "David Dangerfield",
-    "jobTitle": "Software Engineer",
+    "jobTitle": "Full Stack Software Engineer",
     "url": "https://daviddangerfield.com",
     "telephone": "(612) 293-9138",
     "sameAs": ["https://linkedin.com/in/dangerfield"],
