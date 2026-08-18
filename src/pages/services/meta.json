@@ -1,12 +1,12 @@
 {
   "outputPath": "services/index.html",
   "meta": {
-    "title": "Twin Cities Web Development Services | David Dangerfield",
-    "description": "Twin Cities web development services: website modernization, technical SEO foundations, and implementation-focused delivery.",
+    "title": "Full Stack Development Services | Twin Cities | David Dangerfield",
+    "description": "Full stack development services for software platform modernization, APIs, integrations, with focus on reliable and maintainable systems.",
     "canonical": "https://daviddangerfield.com/services/",
     "og": {
-      "title": "Twin Cities Web Development Services",
-      "description": "Implementation-focused website modernization, technical SEO, and software delivery for Minnesota businesses and teams.",
+      "title": "Full Stack Development Services | Twin Cities",
+      "description": "Software platform modernization, APIs, integrations, and applications stability for Minnesota businesses and teams.",
       "type": "website",
       "url": "https://daviddangerfield.com/services/"
     }

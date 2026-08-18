@@ -1,12 +1,12 @@
 {
   "outputPath": "contact/index.html",
   "meta": {
-    "title": "Schedule a Web Development Consultation | Twin Cities, MN | David Dangerfield",
-    "description": "Schedule a consultation with David Dangerfield, a web development partner serving Twin Cities and remote teams.",
+    "title": "Schedule a Software Development Consultation | David Dangerfield",
+    "description": "Schedule a consultation with David Dangerfield, a full stack software engineer serving Twin Cities and remote teams.",
     "canonical": "https://daviddangerfield.com/contact/",
     "og": {
-      "title": "Schedule a Web Development Consultation",
-      "description": "Book a consultation for website modernization, technical SEO foundations, and implementation-focused web delivery.",
+      "title": "Schedule a Software Development Consultation",
+      "description": "Book a consultation to discuss your software project.",
       "type": "website",
       "url": "https://daviddangerfield.com/contact/"
     }
