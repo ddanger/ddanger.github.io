@@ -1,12 +1,12 @@
 {
   "outputPath": "services/index.html",
   "meta": {
-    "title": "Full Stack Development Services | Twin Cities | David Dangerfield",
-    "description": "Full stack development services for software platform modernization, APIs, integrations, with focus on reliable and maintainable systems.",
+    "title": "Technical Expertise | Principal Software Engineer | David Dangerfield",
+    "description": "Technical expertise of David Dangerfield, a Principal Software Engineer with 20+ years across languages, frameworks, cloud infrastructure, and agentic AI-accelerated delivery.",
     "canonical": "https://daviddangerfield.com/services/",
     "og": {
-      "title": "Full Stack Development Services | Twin Cities",
-      "description": "Software platform modernization, APIs, integrations, and applications stability for Minnesota businesses and teams.",
+      "title": "Technical Expertise | David Dangerfield, Principal Software Engineer",
+      "description": "Full-stack engineering depth from Vue.js and TypeScript to legacy modernization, cloud infrastructure, and agentic AI-accelerated delivery.",
       "type": "website",
       "url": "https://daviddangerfield.com/services/"
     }

@@ -1,12 +1,12 @@
 {
   "outputPath": "about/index.html",
   "meta": {
-    "title": "About | Full Stack Software Engineer | David Dangerfield",
-    "description": "About David Dangerfield, a Twin Cities full stack software engineer with 20+ years of software, systems, and delivery experience.",
+    "title": "About | Principal Software Engineer | David Dangerfield",
+    "description": "About David Dangerfield, a Principal Software Engineer with 20+ years of software, systems, and delivery experience across payments, healthcare, and enterprise platforms.",
     "canonical": "https://daviddangerfield.com/about/",
     "og": {
-      "title": "About David Dangerfield | Full Stack Software Engineer",
-      "description": "Software engineering from the Twin Cities, with 20+ years of enterprise software, systems, and delivery experience.",
+      "title": "About David Dangerfield | Principal Software Engineer",
+      "description": "20+ years of full-stack engineering experience, an MS in Computer Science from Purdue, and a passion for shipping clean, reliable software.",
       "type": "profile",
       "url": "https://daviddangerfield.com/about/"
     }
