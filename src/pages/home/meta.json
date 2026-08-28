@@ -1,13 +1,13 @@
 {
   "outputPath": "index.html",
   "meta": {
-    "title": "David Dangerfield | Full Stack Software Engineer",
-    "description": "Full stack application development, modernization, integrations, and delivery from a Twin Cities software engineer with 20+ years of experience.",
-    "keywords": "Twin Cities full stack developer, Minnesota software engineer, web application modernization, API integration consultant",
+    "title": "David Dangerfield | Principal Software Engineer",
+    "description": "Principal Software Engineer with 20+ years building full-stack software for payments, FDA-regulated healthcare, and enterprise-scale consumer platforms. MS in CS, Purdue.",
+    "keywords": "Principal Software Engineer, full stack engineer, Vue.js developer, TypeScript engineer, Minneapolis software engineer, legacy modernization",
     "canonical": "https://daviddangerfield.com/",
     "og": {
-      "title": "Full Stack Software Engineer for Digital Products and Business Systems",
-      "description": "Twin Cities software engineering focused on application modernization, integrations, technical quality, and reliable delivery.",
+      "title": "David Dangerfield | Principal Software Engineer",
+      "description": "20+ years shipping high-stakes software across payments, healthcare, and enterprise platforms, combining deep-system engineering with modern agentic AI tooling.",
       "type": "website",
       "url": "https://daviddangerfield.com/",
       "siteName": "David Dangerfield",
@@ -21,8 +21,8 @@
     },
     "twitter": {
       "card": "summary_large_image",
-      "title": "David Dangerfield | Full Stack Software Engineer",
-      "description": "Application modernization, integrations, and technical delivery with practical execution and measurable impact.",
+      "title": "David Dangerfield | Principal Software Engineer",
+      "description": "20+ years of full-stack engineering across payments, healthcare, and enterprise-scale platforms.",
       "image": "https://daviddangerfield.com/images/social/social-share.jpg",
       "imageAlt": "Social sharing card image for David Dangerfield."
     }
@@ -31,7 +31,7 @@
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "David Dangerfield",
-    "jobTitle": "Full Stack Software Engineer",
+    "jobTitle": "Principal Software Engineer",
     "url": "https://daviddangerfield.com",
     "telephone": "(612) 293-9138",
     "sameAs": ["https://linkedin.com/in/dangerfield"],
@@ -43,7 +43,7 @@
       "postalCode": "55118",
       "addressCountry": "US"
     },
-    "legalName": "David A. Dangerfield LLC"
+    "alumniOf": ["Purdue University", "Brigham Young University"]
   },
   "footer": {
     "scheduleHref": "/contact/",

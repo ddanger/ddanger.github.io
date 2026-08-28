@@ -1,38 +1,33 @@
 # ddanger.github.io
 
-Static personal website for `ddanger.github.io`, built from source HTML fragments under `src/` into generated GitHub Pages output at the repository root.
+Static personal website for `ddanger.github.io`.
 
-## Requirements
+## The Important Rule
 
-- Node.js 24 or newer
-- npm
-- Git
+Edit the source files, then commit the generated HTML too.
 
-## Initial Setup
+GitHub Pages serves this repository as static files from the repo root. That means these generated files must stay committed:
 
-Run this once after cloning:
+- `index.html`
+- `about/index.html`
+- `services/index.html`
+- `contact/index.html`
 
-```sh
-npm run setup:init
-```
+Do not edit those generated HTML files by hand for normal page changes. Edit `src/`, run the build, and commit the generated output that changes.
 
-What this does:
+CI verifies that the committed HTML matches the source. A post-merge workflow can sync generated HTML on `main`, but pull requests should still include generated HTML changes.
 
-- runs an automated macOS check for FFmpeg `drawtext` support
-- uses Homebrew to install `ffmpeg-full` when needed
-- runs `npm install`
+## Daily Workflow
 
-If Homebrew is not installed on macOS, install it first and rerun setup.
+1. Run `npm install` if dependencies are not installed.
+2. Run `npm run dev`.
+3. Edit source files under `src/`, or directly served files like `styles.css` and `script.js`.
+4. Before committing, run `npm run build`.
+5. Commit both your source changes and any generated HTML changes.
 
-Install dependencies after cloning or pulling fresh setup changes:
+## Source vs Generated Files
 
-```sh
-npm install
-```
-
-## Project Structure
-
-Source files are the primary editing surface:
+Use these files for normal edits:
 
 - `src/site.json` - shared site configuration
 - `src/pages/*/meta.json` - page metadata and output paths
@@ -40,81 +35,32 @@ Source files are the primary editing surface:
 - `src/partials/*.html` - shared layout, header, and footer
 - `src/client/` - source JavaScript modules
 - `styles.css` - global styles served directly
+- `script.js` - root client script served directly
 
-Generated files are committed because GitHub Pages serves static output directly:
+These files are generated from `src/` and should be committed after running the build:
 
 - `index.html`
 - `about/index.html`
 - `services/index.html`
 - `contact/index.html`
 
-Do not edit generated HTML directly unless you are intentionally changing a legacy static file. For normal page updates, edit `src/` and rebuild.
+## Commands
 
-## Local Development
-
-Start the local development server:
+Start local development:
 
 ```sh
 npm run dev
 ```
 
-Then open:
+Open `http://localhost:8000`. The dev server builds once, serves the repo root, and rebuilds generated pages when `src/` changes.
 
-```text
-http://localhost:8000
-```
-
-The dev server:
-
-- runs the full build once on startup
-- serves the repository root as a static website
-- watches `src/` and rebuilds generated pages when source files change
-
-Use a different port when needed:
-
-```sh
-PORT=8010 npm run dev
-```
-
-Stop the server with `Ctrl+C`.
-
-### Editing Loop
-
-1. Create a branch.
-2. Run `npm run dev`.
-3. Edit source files in `src/`, `styles.css`, or `script.js`.
-4. Refresh the browser at `http://localhost:8000`.
-5. Run the validation commands before committing.
-
-Changes to `src/` trigger rebuilds automatically while `npm run dev` is running. Changes to directly served files like `styles.css`, `script.js`, images, or PDFs only need a browser refresh.
-
-## Build and Validation
-
-Build generated HTML and format project files:
+Build generated HTML and format files:
 
 ```sh
 npm run build
 ```
 
-Validate source page contracts and links:
-
-```sh
-npm run validate:source
-```
-
-Verify generated HTML matches the source files:
-
-```sh
-npm run verify:generated
-```
-
-Check formatting without writing changes:
-
-```sh
-npm run format:check
-```
-
-Recommended pre-commit check:
+Run the checks CI cares about:
 
 ```sh
 npm run validate:source
@@ -122,58 +68,27 @@ npm run verify:generated
 npm run format:check
 ```
 
-## Branch, Commit, Push, PR
-
-Start from an updated `main`:
+Use a different dev-server port when needed:
 
 ```sh
-git switch main
-git pull
+PORT=8010 npm run dev
 ```
 
-Create a feature branch:
+## Requirements
+
+- Node.js 24 or newer
+- npm
+- Git
+
+Fresh clone setup:
 
 ```sh
-git switch -c my-change-name
+npm run setup:init
 ```
 
-Review your changes:
+For the full automation runbook, see `docs/automation.md`.
 
-```sh
-git status
-git diff
-```
-
-Stage and commit:
-
-```sh
-git add <files-you-changed>
-git commit -m "Describe the change"
-```
-
-When source page files under `src/` change, also stage the generated HTML files updated by `npm run build` or `npm run dev`.
-
-Push the branch:
-
-```sh
-git push --set-upstream origin my-change-name
-```
-
-Open a pull request on GitHub from your branch into `main`.
-
-Before requesting review, confirm the PR includes any generated HTML changes caused by source edits. CI checks that generated output is in sync.
-
-## Pull Request Checks
-
-Pull requests and pushes to `main` run automation for:
-
-- generated HTML consistency
-- Prettier formatting
-- source metadata and link validation, when relevant source files change
-
-After merge, GitHub Actions may update generated artifacts such as `sitemap.xml` or generated HTML on `main` when needed. See `docs/automation.md` for the full automation runbook.
-
-## Common Tasks
+## Less Common Tasks
 
 Regenerate the sitemap:
 
@@ -187,16 +102,8 @@ Run the uptime check locally:
 npm run check:uptime
 ```
 
-Regenerate the resume social-share image after replacing `Resume-David-Dangerfield.pdf`:
+After replacing `Resume-David-Dangerfield.pdf`, regenerate and commit the social-share image:
 
 ```sh
 npm run generate:resume-share
 ```
-
-If FFmpeg resolution is unusual in your shell, you can still force a binary:
-
-```sh
-npm run generate:resume-share -- --ffmpeg-bin /opt/homebrew/opt/ffmpeg-full/bin/ffmpeg
-```
-
-Commit the updated PDF and generated image together.

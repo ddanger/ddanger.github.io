@@ -1,12 +1,12 @@
 {
   "outputPath": "contact/index.html",
   "meta": {
-    "title": "Schedule a Software Development Consultation | David Dangerfield",
-    "description": "Schedule a consultation with David Dangerfield, a full stack software engineer serving Twin Cities and remote teams.",
+    "title": "Schedule a Call | David Dangerfield, Principal Software Engineer",
+    "description": "Schedule a call with David Dangerfield, a Principal Software Engineer, to discuss full-time job opportunities and open roles.",
     "canonical": "https://daviddangerfield.com/contact/",
     "og": {
-      "title": "Schedule a Software Development Consultation",
-      "description": "Book a consultation to discuss your software project.",
+      "title": "Schedule a Call | David Dangerfield, Principal Software Engineer",
+      "description": "Recruiters and hiring managers: book a time to discuss full-time Principal Software Engineer opportunities.",
       "type": "website",
       "url": "https://daviddangerfield.com/contact/"
     }
