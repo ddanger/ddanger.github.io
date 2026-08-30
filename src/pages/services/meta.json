@@ -2,11 +2,11 @@
   "outputPath": "services/index.html",
   "meta": {
     "title": "Technical Expertise | Principal Software Engineer | David Dangerfield",
-    "description": "Technical expertise of David Dangerfield, a Principal Software Engineer with 20+ years across languages, frameworks, cloud infrastructure, and agentic AI-accelerated delivery.",
+    "description": "Technical expertise across TypeScript, Java, Vue, React, cloud infrastructure, legacy modernization, and AI-accelerated delivery.",
     "canonical": "https://daviddangerfield.com/services/",
     "og": {
       "title": "Technical Expertise | David Dangerfield, Principal Software Engineer",
-      "description": "Full-stack engineering depth from Vue.js and TypeScript to legacy modernization, cloud infrastructure, and agentic AI-accelerated delivery.",
+      "description": "Full-stack engineering depth from deep systems and backend services to modern frontend architecture and agentic AI-accelerated delivery.",
       "type": "website",
       "url": "https://daviddangerfield.com/services/"
     }

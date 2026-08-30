@@ -2,12 +2,12 @@
   "outputPath": "index.html",
   "meta": {
     "title": "David Dangerfield | Principal Software Engineer",
-    "description": "Principal Software Engineer with 20+ years building full-stack software for payments, FDA-regulated healthcare, and enterprise-scale consumer platforms. MS in CS, Purdue.",
-    "keywords": "Principal Software Engineer, full stack engineer, Vue.js developer, TypeScript engineer, Minneapolis software engineer, legacy modernization",
+    "description": "Hands-on Principal Software Engineer still in the code daily, shipping full-stack software across payments, healthcare, consumer products, and enterprise platforms.",
+    "keywords": "Principal Software Engineer, hands-on principal engineer, software engineering consultant, Vue.js developer, TypeScript engineer, legacy modernization",
     "canonical": "https://daviddangerfield.com/",
     "og": {
       "title": "David Dangerfield | Principal Software Engineer",
-      "description": "20+ years shipping high-stakes software across payments, healthcare, and enterprise platforms, combining deep-system engineering with modern agentic AI tooling.",
+      "description": "20+ years across high-stakes software, from deep systems and legacy modernization to modern UI delivery with agentic AI tooling.",
       "type": "website",
       "url": "https://daviddangerfield.com/",
       "siteName": "David Dangerfield",
@@ -22,7 +22,7 @@
     "twitter": {
       "card": "summary_large_image",
       "title": "David Dangerfield | Principal Software Engineer",
-      "description": "20+ years of full-stack engineering across payments, healthcare, and enterprise-scale platforms.",
+      "description": "Still in the code daily across payments, healthcare, consumer products, and enterprise software.",
       "image": "https://daviddangerfield.com/images/social/social-share.jpg",
       "imageAlt": "Social sharing card image for David Dangerfield."
     }
