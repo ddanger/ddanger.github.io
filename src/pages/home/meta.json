@@ -2,7 +2,7 @@
   "outputPath": "index.html",
   "meta": {
     "title": "David Dangerfield | Principal Software Engineer",
-    "description": "Hands-on Principal Software Engineer still in the code daily, shipping full-stack software across payments, healthcare, consumer products, and enterprise platforms.",
+    "description": "Hands-on Principal Software Engineer shipping full-stack software across payments, healthcare, consumer products, and enterprise platforms.",
     "keywords": "Principal Software Engineer, hands-on principal engineer, software engineering consultant, Vue.js developer, TypeScript engineer, legacy modernization",
     "canonical": "https://daviddangerfield.com/",
     "og": {
@@ -22,7 +22,7 @@
     "twitter": {
       "card": "summary_large_image",
       "title": "David Dangerfield | Principal Software Engineer",
-      "description": "Still in the code daily across payments, healthcare, consumer products, and enterprise software.",
+      "description": "Hands-on engineering across payments, healthcare, consumer products, and enterprise software.",
       "image": "https://daviddangerfield.com/images/social/social-share.jpg",
       "imageAlt": "Social sharing card image for David Dangerfield."
     }

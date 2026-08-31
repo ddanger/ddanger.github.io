@@ -141,6 +141,22 @@ async function main() {
     errors.push('src/site.json: gaId must match pattern G-XXXXXX (6+ uppercase alphanumerics)')
   }
 
+  const resumeVersion = String(site.resumeVersion || '')
+  if (!resumeVersion) {
+    errors.push('src/site.json: resumeVersion is required and must be a non-empty string')
+  } else if (!/^\d{8}(?:-\d+)?$/.test(resumeVersion)) {
+    errors.push(
+      'src/site.json: resumeVersion must be an 8-digit date like 20260831 or a same-day revision like 20260831-2',
+    )
+  }
+
+  const resumeUrl = String(site.resumeUrl || '')
+  if (!resumeUrl.startsWith('/Resume-David-Dangerfield.pdf?v=')) {
+    errors.push(
+      'src/site.json: resumeUrl must include a version query string such as /Resume-David-Dangerfield.pdf?v=20260831',
+    )
+  }
+
   const pages = await discoverPages(ROOT_DIR)
   const knownRoutes = new Set([...HELPER_ROUTES])
   const canonicalUrls = new Set()
