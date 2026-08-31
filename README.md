@@ -102,8 +102,14 @@ Run the uptime check locally:
 npm run check:uptime
 ```
 
-After replacing `Resume-David-Dangerfield.pdf`, regenerate and commit the social-share image:
+After replacing `Resume-David-Dangerfield.pdf`, run the single resume update command to regenerate the social-share image, bump the cache-busting version, and rebuild the HTML:
 
 ```sh
-npm run generate:resume-share
+npm run update:resume
+```
+
+Optional custom version:
+
+```sh
+npm run update:resume -- --version 20260901
 ```

@@ -140,11 +140,21 @@ function buildFooterScheduleLink(footer) {
 // ---------------------------------------------------------------------------
 // Main build
 // ---------------------------------------------------------------------------
+function injectVersionedResumeLinks(content, resumeUrl) {
+  return content.replaceAll('/Resume-David-Dangerfield.pdf', resumeUrl)
+}
+
 async function build() {
   const site = JSON.parse(await readFile(join(SRC_DIR, 'site.json'), 'utf8'))
   const layout = await readFile(join(SRC_DIR, 'partials', 'layout.html'), 'utf8')
-  const headerPartial = await readFile(join(SRC_DIR, 'partials', 'header.html'), 'utf8')
-  const footerPartial = await readFile(join(SRC_DIR, 'partials', 'footer.html'), 'utf8')
+  const headerPartial = injectVersionedResumeLinks(
+    await readFile(join(SRC_DIR, 'partials', 'header.html'), 'utf8'),
+    site.resumeUrl,
+  )
+  const footerPartial = injectVersionedResumeLinks(
+    await readFile(join(SRC_DIR, 'partials', 'footer.html'), 'utf8'),
+    site.resumeUrl,
+  )
 
   const pagesDir = join(SRC_DIR, 'pages')
   const pageIds = (await readdir(pagesDir, { withFileTypes: true }))
@@ -155,7 +165,10 @@ async function build() {
   for (const pageId of pageIds) {
     const pageDir = join(pagesDir, pageId)
     const page = JSON.parse(await readFile(join(pageDir, 'meta.json'), 'utf8'))
-    const pageContent = await readFile(join(pageDir, 'content.html'), 'utf8')
+    const pageContent = injectVersionedResumeLinks(
+      await readFile(join(pageDir, 'content.html'), 'utf8'),
+      site.resumeUrl,
+    )
 
     const headContent = buildHeadContent(page, site)
     const footer = interpolate(footerPartial, {
